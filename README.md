@@ -35,7 +35,7 @@ Clone the repository:
 ```bash
 git clone https://github.com/Satyajeetbu24/Nexusconvert.git
 cd Nexusconvert
-````
+```
 
 Install dependencies:
 
