@@ -326,11 +326,25 @@ function CurrencyConverter() {
   const liveRate = convert(1, fromCurrency, toCurrency, ratesVsINR);
 
   const handleConvert = () => {
-    if (isNaN(amountNum) || amountNum <= 0) { toast.error("Enter a valid amount greater than zero."); return; }
-    if (wallet[fromCurrency] < amountNum) {
-      toast.error(`Insufficient ${fromCurrency} balance. You have ${fmt(wallet[fromCurrency], fromCurrency)}.`);
-      return;
-    }
+  if (isNaN(amountNum) || amountNum <= 0) {
+    toast.error("Enter a valid amount greater than zero.");
+    return;
+  }
+
+  if (fromCurrency === toCurrency) {
+    toast.error("Choose two different currencies.");
+    return;
+  }
+
+  if (wallet[fromCurrency] < amountNum) {
+    toast.error(
+      `Insufficient ${fromCurrency} balance. You have ${fmt(
+        wallet[fromCurrency],
+        fromCurrency
+      )}.`
+    );
+    return;
+  }
     setWallet((prev) => ({
       ...prev,
       [fromCurrency]: prev[fromCurrency] - amountNum,
@@ -535,7 +549,7 @@ function CurrencyConverter() {
                         <Select value={toCurrency} onValueChange={setToCurrency}>
                           <SelectTrigger data-testid="select-to-currency"><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            {CURRENCY_CODES.map((c) => (
+                            {CURRENCY_CODES.filter((c) => c !== fromCurrency).map((c) => (
                               <SelectItem key={c} value={c}>
                                 <span className="flex items-center gap-2">
                                   <span className="text-base leading-none">{CURRENCY_META[c].flag}</span>
